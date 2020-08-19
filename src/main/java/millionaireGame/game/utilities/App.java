@@ -4,12 +4,11 @@ import millionaireGame.database.DataBase;
 import millionaireGame.question.Question;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class App {
+
+    static Scanner scn = new Scanner(System.in);
 
     public static List<Question> separateQuestions(List<Question> questions, String difficulty) {
         List<Question> separatedQuestions = new ArrayList<>();
@@ -36,9 +35,9 @@ public class App {
         return shuffledArray;
     }
 
-    public static List<Question> shuffledQuestions(Integer[] shuffledArray, List<Question> questions, int howMany) {
+    public static List<Question> shuffleQuestions(Integer[] shuffledArray, List<Question> questions, int howMany) {
         List<Question> shuffledQuestions = new ArrayList<>();
-        for (int i = 0; i < howMany - 1; i++) {
+        for (int i = 0; i < howMany; i++) {
             shuffledQuestions.add(questions.get(shuffledArray[i]));
         }
         return shuffledQuestions;
@@ -46,6 +45,7 @@ public class App {
 
     public static String printQuestion(Question question, int index) {
         String correctAnswer = "";
+        int index2 = 0;
 
         List<String> answers = new ArrayList<>();
         answers.add(question.getCorrectAnswer());
@@ -68,30 +68,47 @@ public class App {
 
         System.out.print("\nYour answer: ");
 
-        for (int i = 0; i < answers.size(); i++) {
-            if (question.getCorrectAnswer().equalsIgnoreCase(answers.get(i))) {
-                correctAnswer = intArray[i].toString() ;
-                break;
+        for (int i = 0; i < 4; i++) {
+            if (intArray[i] == 0){
+                index2 = i;
             }
         }
 
-        switch (correctAnswer) {
-            case "0":
+        switch (index2) {
+            case 0:
                 correctAnswer = "A";
                 break;
-            case "1":
+            case 1:
                 correctAnswer = "B";
                 break;
-            case "2":
+            case 2:
                 correctAnswer = "C";
                 break;
-            case "3":
+            case 3:
                 correctAnswer = "D";
                 break;
         }
 
 
         return correctAnswer;
+    }
+
+    public static String getUserAnswer(){
+        String input;
+        boolean isInputInvalid = true;
+
+        do {
+            input = scn.next();
+
+            if (input.equalsIgnoreCase("A") || input.equalsIgnoreCase("B")
+                    || input.equalsIgnoreCase("C") || input.equalsIgnoreCase("D")) {
+                isInputInvalid = false;
+            } else {
+                System.out.print("Please choose a valid answer: ");
+            }
+        } while (isInputInvalid);
+
+        return input;
     }
 
 

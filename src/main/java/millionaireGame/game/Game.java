@@ -6,26 +6,25 @@ import millionaireGame.game.utilities.Messages;
 import millionaireGame.question.Question;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
 
     static Scanner scn = new Scanner(System.in);
+    static Random rnd = new Random();
 
     public static void playGame() {
         String input;
         boolean isInputInvalid = true;
         boolean isGameNotOver = true;
-        boolean playAgain = true;
-        boolean didHeLose;
+        boolean playAgain;
+        boolean didHeLose = false;
         int index = 0;
+        int intInput;
         Question question;
         String correctAnswer;
 
-        List<Question> easyQuestions = DataBase.getEasyQuestions();
-//        List<Question> mediumQuestions = DataBase.getMediumQuestions();
-//        List<Question> hardQuestions = DataBase.getHardQuestions();
-//        List<Question> lastQuestions = DataBase.getLastQuestions();
 
         Messages.welcome();
 
@@ -43,23 +42,18 @@ public class Game {
 
 
         do {
+            List<Question> easyQuestions = DataBase.getEasyQuestions();
+            List<Question> mediumQuestions = DataBase.getMediumQuestions();
+            List<Question> hardQuestions = DataBase.getHardQuestions();
+            List<Question> lastQuestions = DataBase.getLastQuestions();
+
             do {
                 for (int i = 0; i < 5; i++) {
                     if (isGameNotOver) {
-                        question = DataBase.getEasyQuestions().get(i);
+                        question = easyQuestions.get(i);
                         correctAnswer = App.printQuestion(question, index);
-                        isInputInvalid = true;
 
-                        do {
-                            input = scn.next();
-
-                            if (input.equalsIgnoreCase("A") || input.equalsIgnoreCase("B")
-                                    || input.equalsIgnoreCase("C") || input.equalsIgnoreCase("D")) {
-                                isInputInvalid = false;
-                            } else {
-                                System.out.print("Please choose a valid answer: ");
-                            }
-                        } while (isInputInvalid);
+                        input = App.getUserAnswer();
 
                         if (input.equalsIgnoreCase(correctAnswer)) {
                             System.out.println("Congratulations! Correct answer!");
@@ -70,26 +64,99 @@ public class Game {
                             break;
                         }
                     }
-
                 }
 
                 if (isGameNotOver) {
                     for (int i = 0; i < 5; i++) {
+                        if (isGameNotOver) {
+                            question = mediumQuestions.get(i);
+                            correctAnswer = App.printQuestion(question, index);
 
-                        index++;
+                            input = App.getUserAnswer();
+
+                            if (input.equalsIgnoreCase(correctAnswer)) {
+                                System.out.println("Congratulations! Correct answer!");
+                                index++;
+                            } else {
+                                isGameNotOver = false;
+                                didHeLose = true;
+                                break;
+                            }
+                        }
+
                     }
                 }
 
                 if (isGameNotOver) {
                     for (int i = 0; i < 4; i++) {
+                        if (isGameNotOver) {
+                            question = hardQuestions.get(i);
+                            correctAnswer = App.printQuestion(question, index);
 
-                        index++;
+                            input = App.getUserAnswer();
+
+                            if (input.equalsIgnoreCase(correctAnswer)) {
+                                System.out.println("Congratulations! Correct answer!");
+                                index++;
+                            } else {
+                                isGameNotOver = false;
+                                didHeLose = true;
+                                break;
+                            }
+                        }
+
                     }
                 }
 
-                //todo not a for just one statement
+                if (isGameNotOver){
+                    intInput = rnd.nextInt(lastQuestions.size());
+
+                    question = DataBase.getLastQuestions().get(intInput);
+                    correctAnswer = App.printQuestion(question, index);
+                    input = App.getUserAnswer();
+
+                    if (input.equalsIgnoreCase(correctAnswer)) {
+                        System.out.println("Congratulations! Correct answer!");
+                        index++;
+                    } else {
+                        isGameNotOver = false;
+                        didHeLose = true;
+                        break;
+                    }
+                    index++;
+                }
+
+                //todo you won / game over
+                //todo checkpoint prize
 
             } while (isGameNotOver);
+
+            if (didHeLose) {
+                System.out.println("\nYou've lost!");
+            } else {
+                System.out.println("Congrads! You are a millionaire");
+            }
+
+            isInputInvalid = true;
+            System.out.println("\nPlay again?");
+            System.out.print("Your answer: ");
+
+            do {
+                input = scn.next();
+                if (input.equalsIgnoreCase("yes") | input.equalsIgnoreCase("no")) {
+                    isInputInvalid = false;
+                } else {
+                    System.out.print("Please enter a valid answer: ");
+                }
+            } while (isInputInvalid);
+
+            if (input.equalsIgnoreCase("yes")) {
+                playAgain = true;
+                isGameNotOver = true;
+                index = 0;
+            } else {
+                playAgain = false;
+            }
 
         } while (playAgain);
 
