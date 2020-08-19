@@ -30,7 +30,7 @@ public class DataBase {
         questions.add(q4);
 
         List<String> ew5 = Arrays.asList("A country", "A type of food", "A song");
-        QuestionEasy q5 = new QuestionEasy("What is IKea?", ew5, "A furniture company");
+        QuestionEasy q5 = new QuestionEasy("What is Ikea?", ew5, "A furniture company");
         questions.add(q5);
 
         List<String> ew6 = Arrays.asList("4", "6", "8");
@@ -57,29 +57,41 @@ public class DataBase {
 
     public static List<Question> getEasyQuestions() {
         List<Question> easyQuestions = App.separateQuestions(getQuestions(), "easy");
+        Integer[] shuffledArray = App.shuffleArray(easyQuestions.size());
 
-        return easyQuestions;
+        List<Question> shuffledEasyQuestions =  App.shuffledQuestions(shuffledArray, easyQuestions, 5);
+
+        return shuffledEasyQuestions;
     }
 
 
-    public static List<Question> getMediumQuestions() {
-        List<Question> mediumQuestions = App.separateQuestions(getQuestions(), "medium");
-
-        return mediumQuestions;
-    }
-
-
-    public static List<Question> getHardQuestions() {
-        List<Question> hardQuestions = App.separateQuestions(getQuestions(), "easy");
-
-        return hardQuestions;
-    }
-
-
-    public static List<Question> getLastQuestions() {
-        List<Question> lastQuestions = App.separateQuestions(getQuestions(), "easy");
-
-        return lastQuestions;
-    }
+//    public static List<Question> getMediumQuestions() {
+//        List<Question> mediumQuestions = App.separateQuestions(getQuestions(), "medium");
+//        Integer[] shuffledArray = App.shuffleArray(mediumQuestions.size());
+//
+//        List<Question> shuffledMediumQuestions = App.shuffledQuestions(shuffledArray, mediumQuestions, 5);
+//
+//        return shuffledMediumQuestions;
+//    }
+//
+//
+//    public static List<Question> getHardQuestions() {
+//        List<Question> hardQuestions = App.separateQuestions(getQuestions(), "hard");
+//        Integer[] shuffledArray = App.shuffleArray(hardQuestions.size());
+//
+//        List<Question> shuffledHardQuestions = App.shuffledQuestions(shuffledArray, hardQuestions, 4);
+//
+//        return shuffledHardQuestions;
+//    }
+//
+//
+//    public static List<Question> getLastQuestions() {
+//        List<Question> lastQuestions = App.separateQuestions(getQuestions(), "last");
+//        Integer[] shuffledArray = App.shuffleArray(lastQuestions.size());
+//
+//        List<Question> shuffledLastQuestion = App.shuffledQuestions(shuffledArray, lastQuestions, 1);
+//
+//        return shuffledLastQuestion;
+//    }
 }
 
