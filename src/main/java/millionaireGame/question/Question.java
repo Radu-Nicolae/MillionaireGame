@@ -1,17 +1,18 @@
 package millionaireGame.question;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
 
     private String question;
-    private List<Answer> answers;
+    private List<String> wrongAnswers;
+    private String correctAnswer;
     private String difficulty;
 
-    public Question(String question, List<Answer> answers, String difficulty) {
+    public Question(String question, List<String> wrongAnswers, String correctAnswer, String difficulty) {
         this.question = question;
-        this.answers = answers;
+        this.wrongAnswers = wrongAnswers;
+        this.correctAnswer = correctAnswer;
         this.difficulty = difficulty;
     }
 
@@ -23,12 +24,20 @@ public class Question {
         this.question = question;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<String> getWrongAnswers() {
+        return wrongAnswers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setWrongAnswers(List<String> wrongAnswers) {
+        this.wrongAnswers = wrongAnswers;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public String getDifficulty() {
