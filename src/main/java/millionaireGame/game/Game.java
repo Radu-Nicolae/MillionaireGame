@@ -48,8 +48,8 @@ public class Game {
             List<Question> lastQuestions = DataBase.getLastQuestions();
 
             do {
-                for (int i = 0; i < 5; i++) {
-                    if (isGameNotOver) {
+                if (isGameNotOver) {
+                    for (int i = 0; i < 5; i++) {
                         question = easyQuestions.get(i);
                         correctAnswer = App.printQuestion(question, index);
 
@@ -108,7 +108,7 @@ public class Game {
                     }
                 }
 
-                if (isGameNotOver){
+                if (isGameNotOver) {
                     intInput = rnd.nextInt(lastQuestions.size());
 
                     question = DataBase.getLastQuestions().get(intInput);
@@ -124,6 +124,12 @@ public class Game {
                         break;
                     }
                     index++;
+                }
+
+                if (index == 16) {
+                    isGameNotOver = false;
+                    didHeLose = false;
+                    break;
                 }
 
                 //todo you won / game over
