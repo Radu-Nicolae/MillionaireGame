@@ -1,6 +1,7 @@
 package millionaireGame;
 
 import millionaireGame.game.Game;
+import millionaireGame.game.utilities.Messages;
 
 public class Main {
 

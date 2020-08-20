@@ -140,7 +140,7 @@ public class Game {
             if (didHeLose) {
                 System.out.println("\nYou've lost!");
             } else {
-                System.out.println("Congrads! You are a millionaire");
+                Messages.youAreAMillionaire();
             }
 
             isInputInvalid = true;
