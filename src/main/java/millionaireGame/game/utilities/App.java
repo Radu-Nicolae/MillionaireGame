@@ -101,7 +101,9 @@ public class App {
             input = scn.next();
 
             if (input.equalsIgnoreCase("A") || input.equalsIgnoreCase("B")
-                    || input.equalsIgnoreCase("C") || input.equalsIgnoreCase("D")) {
+                    || input.equalsIgnoreCase("C") || input.equalsIgnoreCase("D")
+                    || input.equalsIgnoreCase("retreat")
+                    || input.equalsIgnoreCase("50") || input.equalsIgnoreCase("50 50")) {
                 isInputInvalid = false;
             } else {
                 System.out.print("Please choose a valid answer: ");
