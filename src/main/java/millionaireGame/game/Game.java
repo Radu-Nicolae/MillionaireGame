@@ -4,7 +4,9 @@ import millionaireGame.database.DataBase;
 import millionaireGame.game.utilities.App;
 import millionaireGame.game.utilities.Messages;
 import millionaireGame.question.Question;
+import sun.plugin2.message.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -21,6 +23,8 @@ public class Game {
         boolean playAgain;
         boolean didHeLose = false;
         boolean didHeRetreat = false;
+        boolean didHeWin = false;
+        List<Boolean> booleans = new ArrayList<>();
         int index = 0;
         int intInput;
         Question question;
@@ -50,99 +54,35 @@ public class Game {
 
             do {
                 if (isGameNotOver) {
-                    for (int i = 0; i < 5; i++) {
-                        question = easyQuestions.get(i);
-                        correctAnswer = App.printQuestion(question, index);
-
-                        input = App.getUserAnswer();
-
-                        if (input.equalsIgnoreCase("retreat")) {
-                            System.out.println("Are you sure you want to retreat?");
-                            System.out.println("You will have " + checkpoint + "€.");
-                            System.out.print("Your answer: ");
-                            isInputInvalid = true;
-                            String answer;
-
-                            do {
-                                answer = scn.next();
-                                if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("no")) {
-                                    isInputInvalid = false;
-                                } else {
-                                    System.out.print("Please enter a valid answer: ");
-                                }
-                            } while (isInputInvalid);
-
-                            if (answer.equalsIgnoreCase("yes")){
-                                didHeRetreat = true;
-                                isGameNotOver = false;
-                                didHeLose = true;
-                                break;
-                            } else {
-                                System.out.print("Enter the answer for the previous question: ");
-                                input = App.getUserAnswer();
-                            }
-                        }  if (input.equalsIgnoreCase(correctAnswer)) {
-                            System.out.println("Congratulations! Correct answer!");
-                            index++;
-
-                        } else {
-                            isGameNotOver = false;
-                            didHeLose = true;
-                            break;
-                        }
-                    }
+                    booleans = App.levels(easyQuestions, 5, 0, "0");
+                    didHeRetreat = booleans.get(0);
+                    didHeLose = booleans.get(1);
+                    isGameNotOver = booleans.get(2);
                 }
 
                 if (isGameNotOver) {
                     checkpoint = "1,000";
                     System.out.println("\nFirst checkpoint. You have " + checkpoint + "€.\n");
-                    for (int i = 0; i < 5; i++) {
-                        if (isGameNotOver) {
-                            question = mediumQuestions.get(i);
-                            correctAnswer = App.printQuestion(question, index);
 
-                            input = App.getUserAnswer();
-
-                            if (input.equalsIgnoreCase(correctAnswer)) {
-                                System.out.println("Congratulations! Correct answer!");
-                                index++;
-                            } else {
-                                isGameNotOver = false;
-                                didHeLose = true;
-                                break;
-                            }
-                        }
-
-                    }
+                    booleans = App.levels(mediumQuestions, 5, 5, "1000");
+                    didHeRetreat = booleans.get(0);
+                    didHeLose = booleans.get(1);
+                    isGameNotOver = booleans.get(2);
                 }
 
                 if (isGameNotOver) {
-                    checkpoint = "32,000";
-                    System.out.println("\nFirst checkpoint. You have " + checkpoint + "€.\n");
+                    System.out.println("\nSecond checkpoint. You have " + checkpoint + "€.\n");
 
-                    for (int i = 0; i < 4; i++) {
-                        if (isGameNotOver) {
-                            question = hardQuestions.get(i);
-                            correctAnswer = App.printQuestion(question, index);
-
-                            input = App.getUserAnswer();
-
-                            if (input.equalsIgnoreCase(correctAnswer)) {
-                                System.out.println("Congratulations! Correct answer!");
-                                index++;
-                            } else {
-                                isGameNotOver = false;
-                                didHeLose = true;
-                                break;
-                            }
-                        }
-
-                    }
+                    booleans = App.levels(hardQuestions, 4, 10, "32000");
+                    didHeRetreat = booleans.get(0);
+                    didHeLose = booleans.get(1);
+                    isGameNotOver = booleans.get(2);
                 }
 
                 if (isGameNotOver) {
+                    index = 14;
                     checkpoint = "500,000";
-                    System.out.println("\nFirst checkpoint. You have " + checkpoint + "€.\n");
+                    System.out.println("\nThird checkpoint. You have " + checkpoint + "€.\n");
                     intInput = rnd.nextInt(lastQuestions.size());
 
                     question = DataBase.getLastQuestions().get(intInput);
@@ -152,6 +92,7 @@ public class Game {
                     if (input.equalsIgnoreCase(correctAnswer)) {
                         System.out.println("Congratulations! Correct answer!");
                         index++;
+                        checkpoint = "1000000";
                     } else {
                         isGameNotOver = false;
                         didHeLose = true;
@@ -160,9 +101,9 @@ public class Game {
                     index++;
                 }
 
-                if (didHeRetreat){
-                    System.out.println("You've retreated! You won " + checkpoint + "€.");
-                    didHeLose = false;
+                if (didHeRetreat) {
+                    System.out.println("\nYou've retreated! You won " + checkpoint + "€.");
+                    didHeWin = false;
                 }
 
                 if (index == 16) {
@@ -176,11 +117,12 @@ public class Game {
 
             } while (isGameNotOver);
 
-            if (didHeLose) {
-                System.out.println("\nYou've lost!");
-            } else {
+            if (checkpoint.equalsIgnoreCase("1000000")) {
                 Messages.youAreAMillionaire();
+            } else if (!didHeRetreat) {
+                System.out.println("You've lost!");
             }
+
 
             isInputInvalid = true;
             System.out.println("\nPlay again?");

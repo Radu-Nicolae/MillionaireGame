@@ -3,7 +3,6 @@ package millionaireGame.game.utilities;
 import millionaireGame.database.DataBase;
 import millionaireGame.question.Question;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class App {
@@ -69,7 +68,7 @@ public class App {
         System.out.print("\nYour answer: ");
 
         for (int i = 0; i < 4; i++) {
-            if (intArray[i] == 0){
+            if (intArray[i] == 0) {
                 index2 = i;
             }
         }
@@ -93,7 +92,7 @@ public class App {
         return correctAnswer;
     }
 
-    public static String getUserAnswer(){
+    public static String getUserAnswer() {
         String input;
         boolean isInputInvalid = true;
 
@@ -111,6 +110,77 @@ public class App {
         } while (isInputInvalid);
 
         return input;
+    }
+
+    public static String retreat(String checkpoint) {
+        boolean isInputInvalid;
+        String answer = "";
+
+        System.out.println("Are you sure you want to retreat?");
+        System.out.println("You will have " + checkpoint + "€.");
+        System.out.print("Your answer: ");
+        isInputInvalid = true;
+
+        do {
+            answer = scn.next();
+            if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("no")) {
+                isInputInvalid = false;
+            } else {
+                System.out.print("Please enter a valid answer: ");
+            }
+        } while (isInputInvalid);
+
+
+        return answer;
+    }
+
+
+    public static List<Boolean> levels(List<Question> levelQuestions, int iterationsNo, int index, String checkpoint) {
+        Question question;
+        String correctAnswer;
+        String input;
+        boolean didHeRetreat = false;
+        boolean didHeLose = false;
+        boolean isGameNotOver = true;
+
+        List<Boolean> booleans = new ArrayList<>();
+
+        for (int i = 0; i < iterationsNo; i++) {
+            question = levelQuestions.get(i);
+            correctAnswer = App.printQuestion(question, index);
+
+            input = App.getUserAnswer();
+
+            if (input.equalsIgnoreCase("retreat")) {
+                String answer;
+                answer = App.retreat(checkpoint);
+
+                if (answer.equalsIgnoreCase("yes")) {
+                    didHeRetreat = true;
+                    isGameNotOver = false;
+                    didHeLose = true;
+                    break;
+                } else {
+                    System.out.print("Enter the answer for the previous question: ");
+                    input = App.getUserAnswer();
+                }
+            }
+            if (input.equalsIgnoreCase(correctAnswer)) {
+                System.out.println("Congratulations! Correct answer!");
+                index++;
+
+            } else {
+                isGameNotOver = false;
+                didHeLose = true;
+                break;
+            }
+        }
+
+        booleans.add(didHeRetreat);
+        booleans.add(didHeLose);
+        booleans.add(isGameNotOver);
+
+        return booleans;
     }
 
 
