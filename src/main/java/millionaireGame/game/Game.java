@@ -33,18 +33,22 @@ public class Game {
 
         Messages.welcome();
 
-        System.out.print("Press 1 to start the game: ");
-
+        System.out.println("Press 1 to start the game");
+        System.out.println("Press 2 to see the rules");
+        System.out.print("\nYour answer: ");
 
         do {
             input = scn.next();
-            if (input.equalsIgnoreCase("1")) {
+            if (input.equalsIgnoreCase("1") || input.equalsIgnoreCase("2")) {
                 isInputInvalid = false;
             } else {
-                System.out.print("Press 1 to start the game: ");
+                System.out.print("Choose between 1 and 2: ");
             }
         } while (isInputInvalid);
 
+        if (input.equalsIgnoreCase("2")){
+            Messages.getRules();
+        }
 
         do {
             List<Question> easyQuestions = DataBase.getEasyQuestions();
@@ -86,8 +90,20 @@ public class Game {
                     intInput = rnd.nextInt(lastQuestions.size());
 
                     question = DataBase.getLastQuestions().get(intInput);
-                    correctAnswer = App.printQuestion(question, index);
-                    input = App.getUserAnswer();
+                    correctAnswer = App.printQuestion(question, index).get(0);
+
+                    isInputInvalid = true;
+                    do {
+                        input = App.getUserAnswer();
+                        if (input.equalsIgnoreCase("50") || input.equalsIgnoreCase("50 50")){
+                            System.out.println("You can't choose 50 50 at the last question!");
+                            System.out.print("Your answer: ");
+                        }
+                        else {
+                            isInputInvalid = false;
+                        }
+                    }
+                    while (isInputInvalid);
 
                     if (input.equalsIgnoreCase(correctAnswer)) {
                         System.out.println("Congratulations! Correct answer!");
